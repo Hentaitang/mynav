@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+    <meta charset="UTF-8">
+    <title>我的导航</title>
+    <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+    <header></header>
+    <main>
+        <div id="mainxxx" class="wrapper"></div>
+    </main>
+    <footer></footer>
+    <script>
+        // 1.初始化数据
+        keys = init()['keys']
+        hash = init()['hash']
+
+        //2.生成键盘
+        generatekeyboard(keys, hash)
+
+        //3.监听键盘
+        listiontoUser(hash)
+        
+        function tag(tagName, attributes){
+            var element = document.createElement(tagName)
+            for(var key in attributes){ // key 为 className, id, textContent
+                element[key] = attributes[key]
+            }
+            return element
+        }
+
+        function creatButton(id){
+            var buttonX = tag('button', {textContent: '编辑', id: id})
+                buttonX.onclick = function(xzkjcnxlkcjlk){
+                    var button2 = xzkjcnxlkcjlk.target
+                    var img2 = button2.previousSibling
+                    var X = prompt('给我一个网址:')
+                    var keyxxx = button2['id']
+                    hash[keyxxx] = X
+                    img2.src = 'http://' + X + '/favicon.ico'
+                    img2.onerror = function(xxx){
+                        xxx.targrt.src = '//i.loli.net/2017/11/10/5a05afbc5e183.png'
+                    }
+                    localStorage.setItem('zzz', JSON.stringify(hash)) 
+                }
+            return buttonX
+        }
+
+        function creatIcon(domain){
+            var img = tag('img')
+                if(domain){
+                    img.src = 'http://' + domain + '/favicon.ico'
+                }else{
+                    img.src = '//i.loli.net/2017/11/10/5a05afbc5e183.png'
+                }
+                img.onerror = function(xxx){
+                    xxx.target.src = '//i.loli.net/2017/11/10/5a05afbc5e183.png'
+                }
+            return img
+        }
+
+        function init(){
+            var keys = {
+            '0': {0:'q',1:'w',2:'e',3:'r',4:'t',5:'y',6:'u',7:'i',8:'o',9:'p',length:10},
+            '1': {0:'a',1:'s',2:'d',3:'f',4:'g',5:'h',6:'j',7:'k',8:'l',length:9},
+            '2': {0:'z',1:'x',2:'c',3:'v',4:'b',5:'n',6:'m',length:7},
+            length: 3
+            }
+            var hash = {
+                'q': 'qq.com',
+                'w': 'weibo.com',
+                'e': 'ele.com',
+                'r': 'renren.com',
+                't': 'tianya.com',
+                'y': 'youtube.com',
+                'u': 'uc.com',
+                'i': 'iqiyi.com',
+                'o': 'opera.com',
+                'p': undefined,
+                'a': 'acfun.tv',
+                's': 'sohu.com',
+                'z': 'zhihu.com',
+                'm': 'www.mcdonalds.com.cn'
+            }
+            //取出 localStorage 中的 zzz 对应的 hash
+            var hashInLocalStorage = JSON.parse(localStorage.getItem('zzz') || 'null')
+            if(hashInLocalStorage){
+                hash = hashInLocalStorage
+            }
+
+            return {'keys': keys,
+            'hash': hash}
+        }
+
+        function generatekeyboard(keys, hash){
+            // 遍历 keys, 生成 kbd 标签
+            for(var index = 0; index < keys['length']; index++ ){
+                var divxxx = tag('div', {className: 'row'})
+
+                var row = keys[index]
+                for(index2 = 0; index2 < row['length']; index2++ ){
+                    var span = tag('span', {textContent: row[index2]})
+
+                    var kbdxxx = tag('kbd',{className: 'key'})
+                    
+                    var buttonX = creatButton(row[index2])
+
+                    var img = creatIcon(hash[row[index2]])
+                    
+                    mainxxx.appendChild(divxxx)
+                    kbdxxx.appendChild(span)
+                    kbdxxx.appendChild(buttonX)
+                    kbdxxx.appendChild(img)
+                    divxxx.appendChild(kbdxxx)
+                }
+            }
+        }
+
+        function listiontoUser(){
+            document.onkeypress = function(xzkjcnxlkcjlk){
+                var key = xzkjcnxlkcjlk['key']
+                var website = hash[key]
+                //location.href = 'http://' + website
+                window.open("http://"+website)
+            }
+        }
+    </script>
+</body>
+</html>
